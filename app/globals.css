@@ -1,0 +1,115 @@
+@import "tailwindcss";
+@import "./fonts.css";
+
+:root {
+  /* Base */
+  --color-paper: #ffffff;
+  --color-ink: #121212;
+  --color-ink-black: #000000;
+
+  /* Surfaces */
+  --color-surface: #f4f4f5;
+  --color-surface-strong: #eceded;
+  --color-track: #e7e7ea;
+
+  /* Text */
+  --color-muted: #9a9aa1;
+  --color-muted-strong: #6f6f76;
+  --color-faded: #c9c9ce;
+
+  /* Borders */
+  --color-border: #121212;
+  --color-border-soft: #dcdce0;
+
+  /* Accents */
+  --color-accent-blue: #1f63f2;
+  --color-accent-blue-soft: #e4edff;
+  --color-accent-pink: #e31c5f;
+  --color-accent-pink-soft: #fce3ec;
+  --color-accent-gold: #d9a441;
+  --color-accent-gold-soft: #f7ecd3;
+  --color-success: #2fa84f;
+  --color-success-soft: #e1f5e6;
+}
+
+@theme inline {
+  --font-sans: "IRANYekan", "Tahoma", ui-sans-serif, system-ui, sans-serif;
+
+  --color-paper: var(--color-paper);
+  --color-ink: var(--color-ink);
+  --color-ink-black: var(--color-ink-black);
+
+  --color-surface: var(--color-surface);
+  --color-surface-strong: var(--color-surface-strong);
+  --color-track: var(--color-track);
+
+  --color-muted: var(--color-muted);
+  --color-muted-strong: var(--color-muted-strong);
+  --color-faded: var(--color-faded);
+
+  --color-border: var(--color-border);
+  --color-border-soft: var(--color-border-soft);
+
+  --color-accent-blue: var(--color-accent-blue);
+  --color-accent-blue-soft: var(--color-accent-blue-soft);
+  --color-accent-pink: var(--color-accent-pink);
+  --color-accent-pink-soft: var(--color-accent-pink-soft);
+  --color-accent-gold: var(--color-accent-gold);
+  --color-accent-gold-soft: var(--color-accent-gold-soft);
+  --color-success: var(--color-success);
+  --color-success-soft: var(--color-success-soft);
+
+  /* Radius scale */
+  --radius-sm: 14px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+
+  /* Hard offset "neo-brutalist" shadows — mirrored for RTL (offset to bottom-start) */
+  --shadow-hard-sm: -3px 3px 0 0 var(--color-ink-black);
+  --shadow-hard: -4px 4px 0 0 var(--color-ink-black);
+  --shadow-hard-lg: -6px 6px 0 0 var(--color-ink-black);
+
+  /* Type scale */
+  --text-display: 2rem;
+  --text-display--line-height: 2.4rem;
+  --text-display--font-weight: 800;
+
+  --text-h1: 1.625rem;
+  --text-h1--line-height: 2.05rem;
+  --text-h1--font-weight: 800;
+
+  --text-h2: 1.25rem;
+  --text-h2--line-height: 1.6rem;
+  --text-h2--font-weight: 700;
+
+  --text-body: 1rem;
+  --text-body--line-height: 1.5rem;
+  --text-body--font-weight: 400;
+
+  --text-body-sm: 0.875rem;
+  --text-body-sm--line-height: 1.3rem;
+  --text-body-sm--font-weight: 400;
+
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1rem;
+  --text-caption--font-weight: 500;
+
+  --text-stat: 3.25rem;
+  --text-stat--line-height: 3.25rem;
+  --text-stat--font-weight: 800;
+
+  --text-button: 0.9375rem;
+  --text-button--line-height: 1.2rem;
+  --text-button--font-weight: 700;
+}
+
+html {
+  direction: rtl;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
