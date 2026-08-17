@@ -10,14 +10,13 @@ import { getEventHistoryFor, type UnifiedEvent } from "@/lib/events";
 import { getAverageRating } from "@/lib/mock-ratings";
 import { getFollowingProfiles } from "@/lib/mock-follows";
 import { StarRating } from "@/components/ui/StarRating";
-import { FollowListSheet, type FollowListPerson } from "@/components/ui/FollowListSheet";
+import type { MockProfileSummary } from "@/lib/mock-data";
 
 export default function ProfilePage() {
   const router = useRouter();
   const [session, setSession] = useState<MockProfile | null | undefined>(undefined);
   const [history, setHistory] = useState<UnifiedEvent[]>([]);
-  const [following, setFollowing] = useState<FollowListPerson[]>([]);
-  const [openSheet, setOpenSheet] = useState<"followers" | "following" | null>(null);
+  const [following, setFollowing] = useState<MockProfileSummary[]>([]);
   const [rating, setRating] = useState<{ average: number | null; count: number }>({
     average: null,
     count: 0,
@@ -73,34 +72,15 @@ export default function ProfilePage() {
       </div>
 
       <div className="mt-6 flex border-y-2 border-ink py-4">
-        <button
-          type="button"
-          onClick={() => setOpenSheet("followers")}
-          className="flex-1 border-e-2 border-ink text-center"
-        >
+        <Link href="/profile/followers" className="flex-1 border-e-2 border-ink text-center">
           <p className="text-h2 text-ink">۰</p>
           <p className="text-caption uppercase tracking-wide text-muted-strong">دنبال‌کننده</p>
-        </button>
-        <button type="button" onClick={() => setOpenSheet("following")} className="flex-1 text-center">
+        </Link>
+        <Link href="/profile/following" className="flex-1 text-center">
           <p className="text-h2 text-ink">{following.length}</p>
           <p className="text-caption uppercase tracking-wide text-muted-strong">دنبال‌شونده</p>
-        </button>
+        </Link>
       </div>
-
-      <FollowListSheet
-        open={openSheet === "followers"}
-        onClose={() => setOpenSheet(null)}
-        title="دنبال‌کنندگان"
-        people={[]}
-        emptyMessage="هنوز کسی شما را دنبال نکرده"
-      />
-      <FollowListSheet
-        open={openSheet === "following"}
-        onClose={() => setOpenSheet(null)}
-        title="دنبال‌شونده‌ها"
-        people={following}
-        emptyMessage="هنوز کسی را دنبال نکرده‌اید"
-      />
 
       <div className="mt-8">
         <h2 className="text-h2 text-ink">تاریخچهٔ رویدادها</h2>
