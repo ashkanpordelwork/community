@@ -72,11 +72,14 @@ export default function ProfilePage() {
       </div>
 
       <div className="mt-6 flex border-y-2 border-ink py-4">
-        <Link href="/profile/followers" className="flex-1 border-e-2 border-ink text-center">
+        <Link
+          href="/profile/connections?tab=followers"
+          className="flex-1 border-e-2 border-ink text-center"
+        >
           <p className="text-h2 text-ink">۰</p>
           <p className="text-caption uppercase tracking-wide text-muted-strong">دنبال‌کننده</p>
         </Link>
-        <Link href="/profile/following" className="flex-1 text-center">
+        <Link href="/profile/connections?tab=following" className="flex-1 text-center">
           <p className="text-h2 text-ink">{following.length}</p>
           <p className="text-caption uppercase tracking-wide text-muted-strong">دنبال‌شونده</p>
         </Link>
