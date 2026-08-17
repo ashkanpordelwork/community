@@ -35,7 +35,7 @@ export function SegmentedControl<T extends string>({
       )}
     >
       <div
-        className="absolute inset-y-1 rounded-pill bg-ink shadow-hard-sm transition-[inset-inline-start] duration-200 ease-out"
+        className="absolute inset-y-1 rounded-pill bg-ink transition-[inset-inline-start] duration-200 ease-out"
         style={{
           width: `calc((100% - ${pad * 2}px) / ${count})`,
           insetInlineStart: `calc(${pad}px + (100% - ${pad * 2}px) * ${activeIndex} / ${count})`,
