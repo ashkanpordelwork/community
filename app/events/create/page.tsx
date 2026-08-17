@@ -8,13 +8,20 @@ import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
 import { Card } from "@/components/ui/Card";
+import { PickerField } from "@/components/ui/PickerField";
 import { DateWheelPicker, TimeWheelPicker } from "@/components/ui/DateTimeWheel";
+import { formatJalaliDate } from "@/lib/jalali";
 import { saveCreatedEvent, type Checkpoint } from "@/lib/mock-events-store";
 
 const TOPIC_SUGGESTIONS = ["کوهنوردی", "دویدن", "دوچرخه‌سواری", "طبیعت‌گردی", "دورهمی"];
 
 function newCheckpoint(): Checkpoint {
   return { id: crypto.randomUUID(), name: "", time: "", location: "", description: "" };
+}
+
+function todayISO() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
 export default function CreateEventPage() {
@@ -106,16 +113,26 @@ export default function CreateEventPage() {
 
       <div className="mt-6 flex flex-col gap-2">
         <span className="px-1 text-caption uppercase tracking-wide text-muted">تاریخ</span>
-        <div className="rounded-md border-2 border-ink bg-surface py-2">
-          <DateWheelPicker value={date} onChange={setDate} />
-        </div>
+        <PickerField
+          label="تاریخ رویداد"
+          value={date}
+          defaultDraft={todayISO()}
+          displayValue={formatJalaliDate}
+          onConfirm={setDate}
+          renderPicker={(draft, setDraft) => <DateWheelPicker value={draft} onChange={setDraft} />}
+        />
       </div>
 
       <div className="mt-6 flex flex-col gap-2">
         <span className="px-1 text-caption uppercase tracking-wide text-muted">ساعت</span>
-        <div className="rounded-md border-2 border-ink bg-surface py-2">
-          <TimeWheelPicker value={time} onChange={setTime} />
-        </div>
+        <PickerField
+          label="ساعت شروع"
+          value={time}
+          defaultDraft="08:00"
+          displayValue={(v) => v}
+          onConfirm={setTime}
+          renderPicker={(draft, setDraft) => <TimeWheelPicker value={draft} onChange={setDraft} />}
+        />
       </div>
 
       <div className="mt-6 flex flex-col gap-2">
@@ -174,10 +191,16 @@ export default function CreateEventPage() {
                   <span className="px-1 text-caption uppercase tracking-wide text-muted">
                     ساعت رسیدن
                   </span>
-                  <div className="mt-1 rounded-md border-2 border-ink bg-surface py-1">
-                    <TimeWheelPicker
+                  <div className="mt-1">
+                    <PickerField
+                      label="ساعت رسیدن"
                       value={cp.time}
-                      onChange={(v) => updateCheckpoint(cp.id, { time: v })}
+                      defaultDraft="08:00"
+                      displayValue={(v) => v}
+                      onConfirm={(v) => updateCheckpoint(cp.id, { time: v })}
+                      renderPicker={(draft, setDraft) => (
+                        <TimeWheelPicker value={draft} onChange={setDraft} />
+                      )}
                     />
                   </div>
                 </div>

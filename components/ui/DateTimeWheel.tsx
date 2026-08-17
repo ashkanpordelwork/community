@@ -1,6 +1,7 @@
 "use client";
 
 import { WheelPicker } from "./WheelPicker";
+import { PERSIAN_MONTHS, jalaaliMonthLength, toGregorian, toJalaali } from "@/lib/jalali";
 
 function pad(n: number) {
   return n.toString().padStart(2, "0");
@@ -11,23 +12,28 @@ function range(start: number, end: number) {
 }
 
 interface DateWheelPickerProps {
-  value: string; // "YYYY-MM-DD"
+  value: string; // Gregorian ISO "YYYY-MM-DD"
   onChange: (value: string) => void;
 }
 
 export function DateWheelPicker({ value, onChange }: DateWheelPickerProps) {
   const today = new Date();
-  const [y, m, d] = value
+  const [gy, gm, gd] = value
     ? value.split("-").map(Number)
     : [today.getFullYear(), today.getMonth() + 1, today.getDate()];
+  const { jy, jm, jd } = toJalaali(gy, gm, gd);
 
-  const years = range(today.getFullYear(), today.getFullYear() + 3);
+  const years = range(jy - 1, jy + 3);
   const months = range(1, 12);
-  const days = range(1, 31);
+  const dayCount = jalaaliMonthLength(jy, jm);
+  const days = range(1, dayCount);
 
-  const setPart = (part: "y" | "m" | "d", newValue: number) => {
-    const next = { y, m, d, [part]: newValue };
-    onChange(`${next.y}-${pad(next.m)}-${pad(next.d)}`);
+  const setPart = (part: "jy" | "jm" | "jd", newValue: number) => {
+    const next = { jy, jm, jd, [part]: newValue };
+    const maxDay = jalaaliMonthLength(next.jy, next.jm);
+    const clampedDay = Math.min(next.jd, maxDay);
+    const g = toGregorian(next.jy, next.jm, clampedDay);
+    onChange(`${g.gy}-${pad(g.gm)}-${pad(g.gd)}`);
   };
 
   return (
@@ -35,23 +41,23 @@ export function DateWheelPicker({ value, onChange }: DateWheelPickerProps) {
       columns={[
         {
           id: "year",
-          value: String(y),
+          value: String(jy),
           items: years.map((n) => ({ value: String(n), label: String(n) })),
-          onChange: (v) => setPart("y", Number(v)),
+          onChange: (v) => setPart("jy", Number(v)),
           width: 84,
         },
         {
           id: "month",
-          value: pad(m),
-          items: months.map((n) => ({ value: pad(n), label: pad(n) })),
-          onChange: (v) => setPart("m", Number(v)),
-          width: 60,
+          value: String(jm),
+          items: months.map((n) => ({ value: String(n), label: PERSIAN_MONTHS[n - 1] })),
+          onChange: (v) => setPart("jm", Number(v)),
+          width: 128,
         },
         {
           id: "day",
-          value: pad(d),
-          items: days.map((n) => ({ value: pad(n), label: pad(n) })),
-          onChange: (v) => setPart("d", Number(v)),
+          value: String(jd),
+          items: days.map((n) => ({ value: String(n), label: pad(n) })),
+          onChange: (v) => setPart("jd", Number(v)),
           width: 60,
         },
       ]}
