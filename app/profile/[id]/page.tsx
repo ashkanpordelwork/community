@@ -9,9 +9,10 @@ import { VerifiedBadge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { EventCard } from "@/components/ui/EventCard";
 import { MOCK_PROFILES } from "@/lib/mock-data";
-import { getEventHistoryFor, type UnifiedEvent } from "@/lib/events";
+import { getAllEvents, getEventHistoryFor, type UnifiedEvent } from "@/lib/events";
 import { getAverageRating } from "@/lib/mock-ratings";
 import { isFollowing, toggleFollow } from "@/lib/mock-follows";
+import { notifyNewEvent } from "@/lib/mock-notifications";
 import { StarRating } from "@/components/ui/StarRating";
 
 export default function PublicProfilePage({ params }: { params: Promise<{ id: string }> }) {
@@ -31,6 +32,17 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
     setHistory(getEventHistoryFor(profile.name));
     setRating(getAverageRating(profile.name, { rating: profile.rating, count: profile.eventsCount }));
   }, [profile]);
+
+  const follow = () => {
+    const nowFollowing = toggleFollow(id);
+    setFollowing(nowFollowing);
+    if (!nowFollowing || !profile) return;
+    const theirEvents = getAllEvents()
+      .filter((e) => e.organizerId === id)
+      .sort((a, b) => new Date(b.dateTimeISO).getTime() - new Date(a.dateTimeISO).getTime());
+    const latest = theirEvents[0];
+    if (latest) notifyNewEvent(latest.id, profile.name, latest.title);
+  };
 
   if (!profile) {
     return (
@@ -93,7 +105,7 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
           size="sm"
           fullWidth={false}
           className="mt-5 px-10"
-          onClick={() => setFollowing(toggleFollow(profile.id))}
+          onClick={follow}
         >
           {following ? "دنبال می‌کنید" : "دنبال کردن"}
         </Button>
