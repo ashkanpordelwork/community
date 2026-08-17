@@ -20,6 +20,12 @@ export function SegmentedControl<T extends string>({
     options.findIndex((o) => o.value === value)
   );
   const count = options.length;
+  // Matches the container's own p-1 (4px). The indicator is absolutely
+  // positioned, so it's measured against the padding box, while the flex
+  // buttons are measured against the content box (padding box minus this
+  // same padding) — the calc() below re-applies that padding by hand so
+  // both line up exactly instead of the indicator drifting toward the border.
+  const pad = 4;
 
   return (
     <div
@@ -31,8 +37,8 @@ export function SegmentedControl<T extends string>({
       <div
         className="absolute inset-y-1 rounded-pill bg-ink shadow-hard-sm transition-[inset-inline-start] duration-200 ease-out"
         style={{
-          width: `calc(${100 / count}% - 4px)`,
-          insetInlineStart: `calc(${(activeIndex * 100) / count}% + 2px)`,
+          width: `calc((100% - ${pad * 2}px) / ${count})`,
+          insetInlineStart: `calc(${pad}px + (100% - ${pad * 2}px) * ${activeIndex} / ${count})`,
         }}
       />
       {options.map((opt) => {
