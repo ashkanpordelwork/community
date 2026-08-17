@@ -3,6 +3,8 @@ export interface MockEvent {
   title: string;
   topic: string;
   date: string;
+  /** Real instant this event happens at, used to derive "held" state. */
+  dateTimeISO: string;
   location: string;
   organizerId: string;
   organizerName: string;
@@ -16,6 +18,7 @@ export const MOCK_EVENTS: MockEvent[] = [
     title: "صعود به قله توچال از مسیر ۷",
     topic: "کوهنوردی",
     date: "۲۵ مرداد · ۰۵:۰۰",
+    dateTimeISO: "2026-08-16T05:00:00",
     location: "تهران",
     organizerId: "1",
     organizerName: "آرش رضایی",
@@ -27,6 +30,7 @@ export const MOCK_EVENTS: MockEvent[] = [
     title: "پیمایش دره کهریزک",
     topic: "طبیعت‌گردی",
     date: "۲۸ مرداد · ۰۶:۳۰",
+    dateTimeISO: "2026-08-20T06:30:00",
     location: "کرج",
     organizerId: "2",
     organizerName: "مریم احمدی",
@@ -38,6 +42,7 @@ export const MOCK_EVENTS: MockEvent[] = [
     title: "دویدن گروهی پارک جنگلی",
     topic: "دویدن",
     date: "۱ شهریور · ۱۷:۰۰",
+    dateTimeISO: "2026-08-24T17:00:00",
     location: "تهران",
     organizerId: "1",
     organizerName: "آرش رضایی",

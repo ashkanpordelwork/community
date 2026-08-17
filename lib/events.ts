@@ -2,6 +2,7 @@ import { MOCK_EVENTS, type MockEvent } from "./mock-data";
 import { loadCreatedEvents, type Checkpoint } from "./mock-events-store";
 import { loadMockSession } from "./mock-session";
 import { formatJalaliDate } from "./jalali";
+import { loadJoinRequestsForEvent } from "./mock-join-requests";
 
 export const MY_ORGANIZER_ID = "me";
 
@@ -27,6 +28,7 @@ export function getAllEvents(): UnifiedEvent[] {
       title: draft.title,
       topic: draft.topic,
       date: `${formatJalaliDate(draft.date)} · ${draft.time}`,
+      dateTimeISO: `${draft.date}T${draft.time}:00`,
       location,
       organizerId: MY_ORGANIZER_ID,
       organizerName: session?.name ?? "من",
@@ -45,4 +47,23 @@ export function getAllEvents(): UnifiedEvent[] {
 
 export function getEventById(id: string): UnifiedEvent | undefined {
   return getAllEvents().find((e) => e.id === id);
+}
+
+export function isEventHeld(event: Pick<UnifiedEvent, "dateTimeISO">): boolean {
+  const time = new Date(event.dateTimeISO).getTime();
+  return !Number.isNaN(time) && time < Date.now();
+}
+
+/** Held events organized by, or joined (approved) by, the given profile name. */
+export function getEventHistoryFor(profileName: string): UnifiedEvent[] {
+  const all = getAllEvents().filter(isEventHeld);
+  const organized = all.filter((e) => e.organizerName === profileName);
+  const joined = all.filter(
+    (e) =>
+      e.organizerName !== profileName &&
+      loadJoinRequestsForEvent(e.id).some((r) => r.requesterName === profileName && r.status === "approved")
+  );
+  return [...organized, ...joined].sort(
+    (a, b) => new Date(b.dateTimeISO).getTime() - new Date(a.dateTimeISO).getTime()
+  );
 }

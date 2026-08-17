@@ -7,7 +7,7 @@ import { BackButton } from "@/components/ui/BackButton";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Avatar } from "@/components/ui/Avatar";
-import { getEventById, type UnifiedEvent } from "@/lib/events";
+import { getEventById, isEventHeld, type UnifiedEvent } from "@/lib/events";
 import { loadMockSession } from "@/lib/mock-session";
 import {
   createJoinRequest,
@@ -52,6 +52,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
     );
   }
 
+  const held = isEventHeld(event);
   const myRequest = myName ? requests.find((r) => r.requesterName === myName) : undefined;
   const pending = requests.filter((r) => r.status === "pending");
   const approved = requests.filter((r) => r.status === "approved");
@@ -77,11 +78,18 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
     <div className="mx-auto flex w-full max-w-[480px] flex-1 flex-col px-6 pb-8 pt-6">
       <BackButton onClick={() => router.back()} />
 
-      <span
-        className={`mt-5 inline-block w-fit rounded-pill px-3 py-1 text-caption font-bold uppercase tracking-wide ${accentMap[event.accent]}`}
-      >
-        {event.topic}
-      </span>
+      <div className="mt-5 flex items-center gap-2">
+        <span
+          className={`inline-block w-fit rounded-pill px-3 py-1 text-caption font-bold uppercase tracking-wide ${accentMap[event.accent]}`}
+        >
+          {event.topic}
+        </span>
+        {held && (
+          <span className="inline-block w-fit rounded-pill border-2 border-ink bg-surface px-3 py-1 text-caption font-bold uppercase tracking-wide text-muted-strong">
+            برگزار شد
+          </span>
+        )}
+      </div>
       <h1 className="mt-3 text-h1 text-ink">{event.title}</h1>
       <p className="mt-2 text-body-sm text-muted-strong">
         {event.date}
@@ -125,10 +133,12 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
           </div>
 
           {pending.length === 0 && approved.length === 0 && (
-            <p className="mt-3 text-body-sm text-muted-strong">هنوز کسی درخواست شرکت نداده</p>
+            <p className="mt-3 text-body-sm text-muted-strong">
+              {held ? "کسی در این رویداد شرکت نکرد" : "هنوز کسی درخواست شرکت نداده"}
+            </p>
           )}
 
-          {pending.length > 0 && (
+          {!held && pending.length > 0 && (
             <div className="mt-4 flex flex-col gap-3">
               {pending.map((r) => (
                 <Card key={r.id} className="flex items-center justify-between p-3">
@@ -175,6 +185,14 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                 ))}
               </div>
             </div>
+          )}
+        </div>
+      ) : held ? (
+        <div className="mt-auto pt-10 text-center">
+          {myRequest?.status === "approved" ? (
+            <p className="text-body-sm font-bold text-success">شما در این رویداد شرکت کردید ✓</p>
+          ) : (
+            <p className="text-body-sm text-muted-strong">این رویداد برگزار شده است</p>
           )}
         </div>
       ) : (

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { EventCard } from "@/components/ui/EventCard";
-import { getAllEvents, type UnifiedEvent } from "@/lib/events";
+import { getAllEvents, isEventHeld, type UnifiedEvent } from "@/lib/events";
 import { cn } from "@/lib/cn";
 
 type Tab = "public" | "following";
@@ -85,6 +85,7 @@ export default function FeedPage() {
               location={event.location}
               organizerName={event.organizerName}
               accent={event.accent}
+              held={isEventHeld(event)}
             />
           </Link>
         ))}

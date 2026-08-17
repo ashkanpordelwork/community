@@ -10,6 +10,7 @@ interface EventCardProps {
   organizerName: string;
   organizerAvatar?: string;
   accent?: "blue" | "pink" | "gold";
+  held?: boolean;
   className?: string;
 }
 
@@ -27,18 +28,26 @@ export function EventCard({
   organizerName,
   organizerAvatar,
   accent = "blue",
+  held = false,
   className,
 }: EventCardProps) {
   return (
-    <Card className={cn("overflow-hidden p-5", className)}>
-      <span
-        className={cn(
-          "inline-block rounded-pill px-3 py-1 text-caption font-bold uppercase tracking-wide",
-          accentMap[accent]
+    <Card className={cn("overflow-hidden p-5", held && "opacity-70", className)}>
+      <div className="flex items-center justify-between gap-2">
+        <span
+          className={cn(
+            "inline-block rounded-pill px-3 py-1 text-caption font-bold uppercase tracking-wide",
+            accentMap[accent]
+          )}
+        >
+          {topic}
+        </span>
+        {held && (
+          <span className="inline-block rounded-pill border-2 border-ink bg-surface px-3 py-1 text-caption font-bold uppercase tracking-wide text-muted-strong">
+            برگزار شد
+          </span>
         )}
-      >
-        {topic}
-      </span>
+      </div>
       <h3 className="mt-3 text-h2 text-ink">{title}</h3>
       <p className="mt-1 text-body-sm text-muted">
         {date} · {location}

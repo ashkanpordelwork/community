@@ -1,13 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Avatar } from "@/components/ui/Avatar";
+import { EventCard } from "@/components/ui/EventCard";
 import { loadMockSession, type MockProfile } from "@/lib/mock-session";
+import { getEventHistoryFor, type UnifiedEvent } from "@/lib/events";
 
 export default function ProfilePage() {
   const router = useRouter();
   const [session, setSession] = useState<MockProfile | null | undefined>(undefined);
+  const [history, setHistory] = useState<UnifiedEvent[]>([]);
 
   useEffect(() => {
     const s = loadMockSession();
@@ -16,6 +20,7 @@ export default function ProfilePage() {
       return;
     }
     setSession(s);
+    setHistory(getEventHistoryFor(s.name));
   }, [router]);
 
   if (!session) return null;
@@ -25,7 +30,7 @@ export default function ProfilePage() {
       <div className="flex flex-col items-center text-center">
         <Avatar name={session.name} src={session.avatarDataUrl ?? undefined} size={96} />
         <h1 className="mt-4 text-h1 text-ink">{session.name}</h1>
-        <p className="mt-1 text-body-sm text-muted-strong">۰ رویداد · بدون امتیاز</p>
+        <p className="mt-1 text-body-sm text-muted-strong">{history.length} رویداد · بدون امتیاز</p>
 
         <div className="mt-3 flex flex-wrap justify-center gap-2">
           {session.tags.map((tag) => (
@@ -50,11 +55,32 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div className="mt-8 flex flex-col items-center gap-2 text-center">
-        <p className="text-body text-ink">هنوز رویدادی ثبت نشده</p>
-        <p className="text-body-sm text-muted-strong">
-          وقتی در رویدادی شرکت کنید یا رویدادی برگزار کنید، اینجا نمایش داده می‌شود
-        </p>
+      <div className="mt-8">
+        <h2 className="text-h2 text-ink">تاریخچهٔ رویدادها</h2>
+        {history.length === 0 ? (
+          <div className="mt-4 flex flex-col items-center gap-2 text-center">
+            <p className="text-body text-ink">هنوز رویدادی ثبت نشده</p>
+            <p className="text-body-sm text-muted-strong">
+              وقتی در رویدادی شرکت کنید یا رویدادی برگزار کنید، اینجا نمایش داده می‌شود
+            </p>
+          </div>
+        ) : (
+          <div className="mt-4 flex flex-col gap-4">
+            {history.map((event) => (
+              <Link key={event.id} href={`/events/${event.id}`}>
+                <EventCard
+                  title={event.title}
+                  topic={event.topic}
+                  date={event.date}
+                  location={event.location}
+                  organizerName={event.organizerName}
+                  accent={event.accent}
+                  held
+                />
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

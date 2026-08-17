@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { notFound } from "next/navigation";
@@ -9,17 +9,21 @@ import { Avatar } from "@/components/ui/Avatar";
 import { VerifiedBadge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { EventCard } from "@/components/ui/EventCard";
-import { MOCK_PROFILES, MOCK_EVENTS } from "@/lib/mock-data";
+import { MOCK_PROFILES } from "@/lib/mock-data";
+import { getEventHistoryFor, type UnifiedEvent } from "@/lib/events";
 
 export default function PublicProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
   const profile = MOCK_PROFILES.find((p) => p.id === id);
   const [following, setFollowing] = useState(profile?.following ?? false);
+  const [history, setHistory] = useState<UnifiedEvent[]>([]);
+
+  useEffect(() => {
+    if (profile) setHistory(getEventHistoryFor(profile.name));
+  }, [profile]);
 
   if (!profile) notFound();
-
-  const organizedEvents = MOCK_EVENTS.filter((e) => e.organizerId === id);
 
   return (
     <div className="mx-auto flex w-full max-w-[480px] flex-1 flex-col px-6 pb-10 pt-6">
@@ -82,10 +86,10 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
       <div className="mt-8">
         <h2 className="text-h2 text-ink">تاریخچهٔ رویدادها</h2>
         <div className="mt-4 flex flex-col gap-4">
-          {organizedEvents.length === 0 && (
+          {history.length === 0 && (
             <p className="text-body-sm text-muted-strong">هنوز رویدادی ثبت نکرده</p>
           )}
-          {organizedEvents.map((event) => (
+          {history.map((event) => (
             <Link key={event.id} href={`/events/${event.id}`}>
               <EventCard
                 title={event.title}
@@ -94,6 +98,7 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
                 location={event.location}
                 organizerName={event.organizerName}
                 accent={event.accent}
+                held
               />
             </Link>
           ))}
