@@ -9,7 +9,6 @@ export interface MockEvent {
   organizerId: string;
   organizerName: string;
   accent: "blue" | "pink" | "gold";
-  following: boolean;
 }
 
 export const MOCK_EVENTS: MockEvent[] = [
@@ -23,7 +22,6 @@ export const MOCK_EVENTS: MockEvent[] = [
     organizerId: "1",
     organizerName: "آرش رضایی",
     accent: "blue",
-    following: true,
   },
   {
     id: "2",
@@ -35,7 +33,6 @@ export const MOCK_EVENTS: MockEvent[] = [
     organizerId: "2",
     organizerName: "مریم احمدی",
     accent: "gold",
-    following: false,
   },
   {
     id: "3",
@@ -47,7 +44,6 @@ export const MOCK_EVENTS: MockEvent[] = [
     organizerId: "1",
     organizerName: "آرش رضایی",
     accent: "pink",
-    following: true,
   },
 ];
 
@@ -58,7 +54,6 @@ export interface MockProfileSummary {
   eventsCount: number;
   rating: number;
   verified: boolean;
-  following: boolean;
   followers: number;
   followingCount: number;
   social?: string;
@@ -72,7 +67,6 @@ export const MOCK_PROFILES: MockProfileSummary[] = [
     eventsCount: 24,
     rating: 4.8,
     verified: true,
-    following: true,
     followers: 312,
     followingCount: 48,
     social: "instagram.com/arash.rezaei",
@@ -84,7 +78,6 @@ export const MOCK_PROFILES: MockProfileSummary[] = [
     eventsCount: 9,
     rating: 4.5,
     verified: false,
-    following: false,
     followers: 87,
     followingCount: 120,
   },

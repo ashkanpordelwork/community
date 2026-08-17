@@ -8,12 +8,14 @@ import { EventCard } from "@/components/ui/EventCard";
 import { loadMockSession, type MockProfile } from "@/lib/mock-session";
 import { getEventHistoryFor, type UnifiedEvent } from "@/lib/events";
 import { getAverageRating } from "@/lib/mock-ratings";
+import { getFollowingCount } from "@/lib/mock-follows";
 import { StarRating } from "@/components/ui/StarRating";
 
 export default function ProfilePage() {
   const router = useRouter();
   const [session, setSession] = useState<MockProfile | null | undefined>(undefined);
   const [history, setHistory] = useState<UnifiedEvent[]>([]);
+  const [followingCount, setFollowingCount] = useState(0);
   const [rating, setRating] = useState<{ average: number | null; count: number }>({
     average: null,
     count: 0,
@@ -28,6 +30,7 @@ export default function ProfilePage() {
     setSession(s);
     setHistory(getEventHistoryFor(s.name));
     setRating(getAverageRating(s.name));
+    setFollowingCount(getFollowingCount());
   }, [router]);
 
   if (!session) return null;
@@ -73,7 +76,7 @@ export default function ProfilePage() {
           <p className="text-caption uppercase tracking-wide text-muted-strong">دنبال‌کننده</p>
         </div>
         <div className="flex-1 text-center">
-          <p className="text-h2 text-ink">۰</p>
+          <p className="text-h2 text-ink">{followingCount}</p>
           <p className="text-caption uppercase tracking-wide text-muted-strong">دنبال‌شونده</p>
         </div>
       </div>

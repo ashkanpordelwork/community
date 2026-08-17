@@ -3,10 +3,13 @@ import { loadCreatedEvents, type Checkpoint } from "./mock-events-store";
 import { loadMockSession } from "./mock-session";
 import { formatJalaliDate } from "./jalali";
 import { loadJoinRequestsForEvent } from "./mock-join-requests";
+import { isFollowing } from "./mock-follows";
 
 export const MY_ORGANIZER_ID = "me";
 
 export interface UnifiedEvent extends MockEvent {
+  /** Whether the current mock user follows this event's organizer. */
+  following: boolean;
   description?: string;
   checkpoints?: Checkpoint[];
   capacityType?: "limited" | "open";
@@ -16,7 +19,7 @@ export interface UnifiedEvent extends MockEvent {
 }
 
 function fromMock(event: MockEvent): UnifiedEvent {
-  return { ...event, isMine: false };
+  return { ...event, following: isFollowing(event.organizerId), isMine: false };
 }
 
 export function getAllEvents(): UnifiedEvent[] {

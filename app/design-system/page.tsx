@@ -127,6 +127,13 @@ export default function DesignSystemPage() {
         <StepProgress step={2} totalSteps={5} />
       </Section>
 
+      <Section title="نوار پیشرفت">
+        <div className="flex flex-col gap-3">
+          <ProgressBar value={65} />
+          <ProgressBar value={40} colorClassName="bg-accent-pink" />
+        </div>
+      </Section>
+
       <Section title="جعبهٔ آماری">
         <div className="flex gap-3">
           <StatBox label="مدت" value="۲۶" unit="دقیقه" accentClassName="text-accent-blue" />

@@ -177,7 +177,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
             )}
           </div>
 
-          {pending.length === 0 && approved.length === 0 && (
+          {(held ? approved.length === 0 : pending.length === 0 && approved.length === 0) && (
             <p className="mt-3 text-body-sm text-muted-strong">
               {held ? "کسی در این رویداد شرکت نکرد" : "هنوز کسی درخواست شرکت نداده"}
             </p>

@@ -3,7 +3,6 @@
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { notFound } from "next/navigation";
 import { BackButton } from "@/components/ui/BackButton";
 import { Avatar } from "@/components/ui/Avatar";
 import { VerifiedBadge } from "@/components/ui/Badge";
@@ -12,13 +11,14 @@ import { EventCard } from "@/components/ui/EventCard";
 import { MOCK_PROFILES } from "@/lib/mock-data";
 import { getEventHistoryFor, type UnifiedEvent } from "@/lib/events";
 import { getAverageRating } from "@/lib/mock-ratings";
+import { isFollowing, toggleFollow } from "@/lib/mock-follows";
 import { StarRating } from "@/components/ui/StarRating";
 
 export default function PublicProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
   const profile = MOCK_PROFILES.find((p) => p.id === id);
-  const [following, setFollowing] = useState(profile?.following ?? false);
+  const [following, setFollowing] = useState(false);
   const [history, setHistory] = useState<UnifiedEvent[]>([]);
   const [rating, setRating] = useState<{ average: number | null; count: number }>({
     average: profile?.rating ?? null,
@@ -27,11 +27,21 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
 
   useEffect(() => {
     if (!profile) return;
+    setFollowing(isFollowing(profile.id));
     setHistory(getEventHistoryFor(profile.name));
     setRating(getAverageRating(profile.name, { rating: profile.rating, count: profile.eventsCount }));
   }, [profile]);
 
-  if (!profile) notFound();
+  if (!profile) {
+    return (
+      <div className="mx-auto flex w-full max-w-[480px] flex-1 flex-col items-center justify-center px-6 pb-8 pt-6 text-center">
+        <p className="text-body text-ink">این پروفایل پیدا نشد</p>
+        <Button variant="outline" size="sm" fullWidth={false} className="mt-4" onClick={() => router.push("/feed")}>
+          بازگشت به فید
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto flex w-full max-w-[480px] flex-1 flex-col px-6 pb-10 pt-6">
@@ -83,7 +93,7 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
           size="sm"
           fullWidth={false}
           className="mt-5 px-10"
-          onClick={() => setFollowing((f) => !f)}
+          onClick={() => setFollowing(toggleFollow(profile.id))}
         >
           {following ? "دنبال می‌کنید" : "دنبال کردن"}
         </Button>
@@ -91,7 +101,7 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
 
       <div className="mt-6 flex border-y-2 border-ink py-4">
         <div className="flex-1 border-e-2 border-ink text-center">
-          <p className="text-h2 text-ink">{profile.followers}</p>
+          <p className="text-h2 text-ink">{profile.followers + (following ? 1 : 0)}</p>
           <p className="text-caption uppercase tracking-wide text-muted-strong">دنبال‌کننده</p>
         </div>
         <div className="flex-1 text-center">
