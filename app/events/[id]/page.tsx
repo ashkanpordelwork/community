@@ -19,6 +19,7 @@ import {
   type JoinRequest,
 } from "@/lib/mock-join-requests";
 import { findMyRating, getAverageRating, saveRating, type Rating } from "@/lib/mock-ratings";
+import { addComment, loadCommentsForEvent, type Comment } from "@/lib/mock-comments";
 
 const accentMap = {
   blue: "bg-accent-blue-soft text-accent-blue",
@@ -36,8 +37,11 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
   const [myRating, setMyRating] = useState<Rating | undefined>(undefined);
   const [draftStars, setDraftStars] = useState(0);
   const [draftComment, setDraftComment] = useState("");
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [newComment, setNewComment] = useState("");
 
   const refreshRequests = () => setRequests(loadJoinRequestsForEvent(id));
+  const refreshComments = () => setComments(loadCommentsForEvent(id));
 
   useEffect(() => {
     setEvent(getEventById(id) ?? null);
@@ -45,6 +49,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
     setMyName(name);
     if (name) setMyRating(findMyRating(id, name));
     refreshRequests();
+    refreshComments();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
@@ -87,6 +92,14 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
     if (!myName || draftStars === 0) return;
     const rating = saveRating(event.id, myName, event.organizerName, draftStars, draftComment.trim());
     setMyRating(rating);
+  };
+
+  const submitComment = () => {
+    const text = newComment.trim();
+    if (!myName || !text) return;
+    addComment(event.id, myName, text);
+    setNewComment("");
+    refreshComments();
   };
 
   const organizerSeedProfile = MOCK_PROFILES.find((p) => p.id === event.organizerId);
@@ -263,7 +276,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
           )}
         </div>
       ) : (
-        <div className="mt-auto pt-10">
+        <div className="mt-8">
           {myRequest?.status === "approved" && (
             <p className="mb-3 text-center text-body-sm font-bold text-success">
               درخواست شما تأیید شد ✓
@@ -289,6 +302,45 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
           </Button>
         </div>
       )}
+
+      <div className="mt-8">
+        <h2 className="text-h2 text-ink">نظرات</h2>
+        <div className="mt-4 flex flex-col gap-3">
+          {comments.length === 0 && (
+            <p className="text-body-sm text-muted-strong">هنوز نظری ثبت نشده</p>
+          )}
+          {comments.map((c) => (
+            <Card key={c.id} className="p-3">
+              <div className="flex items-center gap-2">
+                <Avatar name={c.authorName} size={28} bordered={false} />
+                <span className="text-body-sm font-bold text-ink">{c.authorName}</span>
+              </div>
+              <p className="mt-2 text-body-sm text-muted-strong">{c.text}</p>
+            </Card>
+          ))}
+        </div>
+
+        {myName && (
+          <div className="mt-4 flex items-end gap-2">
+            <input
+              placeholder="نظرت رو بنویس..."
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && submitComment()}
+              className="h-12 flex-1 rounded-pill border-2 border-transparent bg-surface px-5 text-body-sm text-ink outline-none focus:border-ink focus:bg-paper"
+            />
+            <Button
+              variant="accent-blue"
+              size="sm"
+              fullWidth={false}
+              disabled={!newComment.trim()}
+              onClick={submitComment}
+            >
+              ارسال
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
