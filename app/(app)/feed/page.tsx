@@ -3,7 +3,13 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { EventCard } from "@/components/ui/EventCard";
+import { Card } from "@/components/ui/Card";
+import { Avatar } from "@/components/ui/Avatar";
+import { Button } from "@/components/ui/Button";
+import { VerifiedBadge } from "@/components/ui/Badge";
 import { getAllEvents, isEventHeld, type UnifiedEvent } from "@/lib/events";
+import { loadMockSession } from "@/lib/mock-session";
+import { getSuggestedProfiles, toggleFollow, type SuggestedProfile } from "@/lib/mock-follows";
 import { cn } from "@/lib/cn";
 
 type Tab = "public" | "following";
@@ -14,10 +20,23 @@ export default function FeedPage() {
   // Starts empty so the server-rendered markup (no localStorage access) matches
   // the client's first paint; created events are filled in after mount.
   const [allEvents, setAllEvents] = useState<UnifiedEvent[]>([]);
+  const [suggestions, setSuggestions] = useState<SuggestedProfile[]>([]);
+
+  const refreshSuggestions = () => {
+    const session = loadMockSession();
+    setSuggestions(session ? getSuggestedProfiles(session.tags) : []);
+  };
 
   useEffect(() => {
     setAllEvents(getAllEvents());
+    refreshSuggestions();
   }, []);
+
+  const follow = (id: string) => {
+    toggleFollow(id);
+    refreshSuggestions();
+    setAllEvents(getAllEvents());
+  };
 
   const events = useMemo(() => {
     const base = tab === "following" ? allEvents.filter((e) => e.following) : allEvents;
@@ -74,6 +93,35 @@ export default function FeedPage() {
           دنبال‌شده‌ها
         </button>
       </div>
+
+      {tab === "following" && suggestions.length > 0 && (
+        <div className="mt-6">
+          <h2 className="text-h2 text-ink">پیشنهاد برای دنبال کردن</h2>
+          <div className="mt-3 flex flex-col gap-3">
+            {suggestions.map(({ profile, sharedTags }) => (
+              <Card key={profile.id} className="flex flex-col gap-3 p-3">
+                <div className="flex items-center gap-3">
+                  <Link href={`/profile/${profile.id}`}>
+                    <Avatar name={profile.name} size={44} />
+                  </Link>
+                  <div className="flex-1">
+                    <Link href={`/profile/${profile.id}`} className="flex items-center gap-1.5">
+                      <span className="text-body-sm font-bold text-ink">{profile.name}</span>
+                      {profile.verified && <VerifiedBadge />}
+                    </Link>
+                    <p className="text-caption text-muted-strong">
+                      علاقهٔ مشترک: {sharedTags.join("، ")}
+                    </p>
+                  </div>
+                </div>
+                <Button variant="secondary" size="sm" shadow={false} onClick={() => follow(profile.id)}>
+                  دنبال کردن
+                </Button>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="mt-6 flex flex-col gap-4">
         {events.map((event) => (

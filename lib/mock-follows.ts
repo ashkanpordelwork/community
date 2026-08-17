@@ -39,3 +39,23 @@ export function getFollowingProfiles(): MockProfileSummary[] {
   const ids = loadFollowing();
   return MOCK_PROFILES.filter((p) => ids.includes(p.id));
 }
+
+export interface SuggestedProfile {
+  profile: MockProfileSummary;
+  sharedTags: string[];
+}
+
+/** People not already followed, ranked by number of tags shared with `myTags`. */
+export function getSuggestedProfiles(myTags: string[], limit = 5): SuggestedProfile[] {
+  const myTagSet = new Set(myTags);
+  const followedIds = new Set(loadFollowing());
+
+  return MOCK_PROFILES.filter((p) => !followedIds.has(p.id))
+    .map((profile) => ({
+      profile,
+      sharedTags: profile.tags.filter((t) => myTagSet.has(t)),
+    }))
+    .filter((entry) => entry.sharedTags.length > 0)
+    .sort((a, b) => b.sharedTags.length - a.sharedTags.length)
+    .slice(0, limit);
+}
