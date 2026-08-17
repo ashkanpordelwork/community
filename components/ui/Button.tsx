@@ -8,6 +8,8 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;
   fullWidth?: boolean;
+  /** Set false for buttons sitting inside a card/list row — keeps them flat, no hard shadow. */
+  shadow?: boolean;
 }
 
 const variantClasses: Record<Variant, string> = {
@@ -27,6 +29,7 @@ export function Button({
   variant = "primary",
   size = "md",
   fullWidth = true,
+  shadow = true,
   disabled,
   className,
   children,
@@ -34,7 +37,7 @@ export function Button({
 }: ButtonProps) {
   const stateClasses = disabled
     ? "bg-faded border-faded text-paper shadow-none"
-    : cn(variant !== "outline" && "shadow-hard", variantClasses[variant]);
+    : cn(variant !== "outline" && shadow && "shadow-hard", variantClasses[variant]);
 
   return (
     <button

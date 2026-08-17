@@ -34,7 +34,7 @@ export default function CreateEventPage() {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [description, setDescription] = useState("");
-  const [checkpoints, setCheckpoints] = useState<Checkpoint[]>([newCheckpoint()]);
+  const [checkpoints, setCheckpoints] = useState<Checkpoint[]>([]);
   const [capacityType, setCapacityType] = useState<"limited" | "open">("limited");
   const [capacity, setCapacity] = useState("");
   const [entryCondition, setEntryCondition] = useState("");
@@ -47,7 +47,7 @@ export default function CreateEventPage() {
   };
 
   const removeCheckpoint = (id: string) => {
-    setCheckpoints((prev) => (prev.length > 1 ? prev.filter((c) => c.id !== id) : prev));
+    setCheckpoints((prev) => prev.filter((c) => c.id !== id));
   };
 
   const publish = () => {
@@ -159,6 +159,10 @@ export default function CreateEventPage() {
           </Button>
         </div>
 
+        {checkpoints.length === 0 && (
+          <p className="mt-3 text-body-sm text-muted-strong">هنوز نقطهٔ توقفی اضافه نشده</p>
+        )}
+
         <div className="mt-4 flex flex-col gap-4">
           {checkpoints.map((cp, i) => (
             <Card key={cp.id} className="p-4">
@@ -166,15 +170,13 @@ export default function CreateEventPage() {
                 <span className="text-caption font-bold uppercase tracking-wide text-muted">
                   نقطهٔ {i + 1}
                 </span>
-                {checkpoints.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeCheckpoint(cp.id)}
-                    className="text-caption font-bold text-accent-pink"
-                  >
-                    حذف
-                  </button>
-                )}
+                <button
+                  type="button"
+                  onClick={() => removeCheckpoint(cp.id)}
+                  className="text-caption font-bold text-accent-pink"
+                >
+                  حذف
+                </button>
               </div>
               <div className="mt-3 flex flex-col gap-3">
                 <input

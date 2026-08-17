@@ -132,7 +132,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
         {event.location ? ` · ${event.location}` : ""}
       </p>
 
-      <Card className="mt-6 flex items-center justify-between p-4">
+      <Card className="mt-6 flex flex-col gap-3 p-4">
         <div className="flex items-center gap-3">
           <Avatar name={event.organizerName} size={44} />
           <div>
@@ -151,7 +151,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
         </div>
         {!event.isMine && (
           <Link href={`/profile/${event.organizerId}`}>
-            <Button variant="secondary" size="sm" fullWidth={false}>
+            <Button variant="secondary" size="sm" shadow={false}>
               مشاهدهٔ پروفایل
             </Button>
           </Link>
@@ -196,6 +196,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                       variant="accent-blue"
                       size="sm"
                       fullWidth={false}
+                      shadow={false}
                       disabled={capacityFull}
                       onClick={() => respond(r.id, "approved")}
                     >
@@ -205,6 +206,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                       variant="secondary"
                       size="sm"
                       fullWidth={false}
+                      shadow={false}
                       onClick={() => respond(r.id, "rejected")}
                     >
                       رد
@@ -261,6 +263,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                       variant="accent-blue"
                       size="sm"
                       fullWidth={false}
+                      shadow={false}
                       className="px-10"
                       disabled={draftStars === 0}
                       onClick={submitRating}
