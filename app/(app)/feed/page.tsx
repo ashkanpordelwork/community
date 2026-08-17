@@ -7,11 +7,11 @@ import { Card } from "@/components/ui/Card";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
 import { VerifiedBadge } from "@/components/ui/Badge";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { getAllEvents, isEventHeld, type UnifiedEvent } from "@/lib/events";
 import { loadMockSession } from "@/lib/mock-session";
 import { getSuggestedProfiles, toggleFollow, type SuggestedProfile } from "@/lib/mock-follows";
 import { getUnreadCount, notifyNewEvent } from "@/lib/mock-notifications";
-import { cn } from "@/lib/cn";
 
 type Tab = "public" | "following";
 
@@ -102,28 +102,15 @@ export default function FeedPage() {
         className="mt-4 h-12 w-full rounded-pill border-2 border-transparent bg-surface px-5 text-body-sm text-ink outline-none focus:border-ink focus:bg-paper"
       />
 
-      <div className="mt-4 flex gap-2">
-        <button
-          type="button"
-          onClick={() => setTab("public")}
-          className={cn(
-            "h-11 flex-1 rounded-pill border-2 border-ink text-body-sm font-bold",
-            tab === "public" ? "bg-ink text-paper" : "bg-paper text-ink"
-          )}
-        >
-          فید عمومی
-        </button>
-        <button
-          type="button"
-          onClick={() => setTab("following")}
-          className={cn(
-            "h-11 flex-1 rounded-pill border-2 border-ink text-body-sm font-bold",
-            tab === "following" ? "bg-ink text-paper" : "bg-paper text-ink"
-          )}
-        >
-          دنبال‌شده‌ها
-        </button>
-      </div>
+      <SegmentedControl
+        className="mt-4"
+        value={tab}
+        onChange={setTab}
+        options={[
+          { value: "public", label: "فید عمومی" },
+          { value: "following", label: "دنبال‌شده‌ها" },
+        ]}
+      />
 
       {tab === "following" && suggestions.length > 0 && (
         <div className="mt-6">

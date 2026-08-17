@@ -6,10 +6,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { BackButton } from "@/components/ui/BackButton";
 import { Avatar } from "@/components/ui/Avatar";
 import { VerifiedBadge } from "@/components/ui/Badge";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { loadMockSession } from "@/lib/mock-session";
 import { getFollowingProfiles } from "@/lib/mock-follows";
 import type { MockProfileSummary } from "@/lib/mock-data";
-import { cn } from "@/lib/cn";
 
 type Tab = "followers" | "following";
 
@@ -40,28 +40,15 @@ function ConnectionsContent() {
         <h1 className="text-h1 text-ink">ارتباطات</h1>
       </div>
 
-      <div className="mt-6 flex gap-2">
-        <button
-          type="button"
-          onClick={() => setTab("followers")}
-          className={cn(
-            "h-11 flex-1 rounded-pill border-2 border-ink text-body-sm font-bold",
-            tab === "followers" ? "bg-ink text-paper" : "bg-paper text-ink"
-          )}
-        >
-          دنبال‌کنندگان
-        </button>
-        <button
-          type="button"
-          onClick={() => setTab("following")}
-          className={cn(
-            "h-11 flex-1 rounded-pill border-2 border-ink text-body-sm font-bold",
-            tab === "following" ? "bg-ink text-paper" : "bg-paper text-ink"
-          )}
-        >
-          دنبال‌شونده‌ها
-        </button>
-      </div>
+      <SegmentedControl
+        className="mt-6"
+        value={tab}
+        onChange={setTab}
+        options={[
+          { value: "followers", label: "دنبال‌کنندگان" },
+          { value: "following", label: "دنبال‌شونده‌ها" },
+        ]}
+      />
 
       {tab === "followers" ? (
         <p className="mt-10 text-center text-body-sm text-muted-strong">هنوز کسی شما را دنبال نکرده</p>
