@@ -2,6 +2,7 @@
 
 import { use } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { BackButton } from "@/components/ui/BackButton";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -44,9 +45,11 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
             <p className="text-caption text-muted">برگزارکننده</p>
           </div>
         </div>
-        <Button variant="secondary" size="sm" fullWidth={false}>
-          مشاهدهٔ پروفایل
-        </Button>
+        <Link href={`/profile/${event.organizerId}`}>
+          <Button variant="secondary" size="sm" fullWidth={false}>
+            مشاهدهٔ پروفایل
+          </Button>
+        </Link>
       </Card>
 
       <div className="mt-6">

@@ -4,6 +4,7 @@ export interface MockEvent {
   topic: string;
   date: string;
   location: string;
+  organizerId: string;
   organizerName: string;
   accent: "blue" | "pink" | "gold";
   following: boolean;
@@ -16,6 +17,7 @@ export const MOCK_EVENTS: MockEvent[] = [
     topic: "کوهنوردی",
     date: "۲۵ مرداد · ۰۵:۰۰",
     location: "تهران",
+    organizerId: "1",
     organizerName: "آرش رضایی",
     accent: "blue",
     following: true,
@@ -26,6 +28,7 @@ export const MOCK_EVENTS: MockEvent[] = [
     topic: "طبیعت‌گردی",
     date: "۲۸ مرداد · ۰۶:۳۰",
     location: "کرج",
+    organizerId: "2",
     organizerName: "مریم احمدی",
     accent: "gold",
     following: false,
@@ -36,7 +39,8 @@ export const MOCK_EVENTS: MockEvent[] = [
     topic: "دویدن",
     date: "۱ شهریور · ۱۷:۰۰",
     location: "تهران",
-    organizerName: "جواد کریمی",
+    organizerId: "1",
+    organizerName: "آرش رضایی",
     accent: "pink",
     following: true,
   },
@@ -50,6 +54,9 @@ export interface MockProfileSummary {
   rating: number;
   verified: boolean;
   following: boolean;
+  followers: number;
+  followingCount: number;
+  social?: string;
 }
 
 export const MOCK_PROFILES: MockProfileSummary[] = [
@@ -61,6 +68,9 @@ export const MOCK_PROFILES: MockProfileSummary[] = [
     rating: 4.8,
     verified: true,
     following: true,
+    followers: 312,
+    followingCount: 48,
+    social: "instagram.com/arash.rezaei",
   },
   {
     id: "2",
@@ -70,5 +80,7 @@ export const MOCK_PROFILES: MockProfileSummary[] = [
     rating: 4.5,
     verified: false,
     following: false,
+    followers: 87,
+    followingCount: 120,
   },
 ];
