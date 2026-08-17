@@ -8,14 +8,16 @@ import { EventCard } from "@/components/ui/EventCard";
 import { loadMockSession, type MockProfile } from "@/lib/mock-session";
 import { getEventHistoryFor, type UnifiedEvent } from "@/lib/events";
 import { getAverageRating } from "@/lib/mock-ratings";
-import { getFollowingCount } from "@/lib/mock-follows";
+import { getFollowingProfiles } from "@/lib/mock-follows";
 import { StarRating } from "@/components/ui/StarRating";
+import { FollowListSheet, type FollowListPerson } from "@/components/ui/FollowListSheet";
 
 export default function ProfilePage() {
   const router = useRouter();
   const [session, setSession] = useState<MockProfile | null | undefined>(undefined);
   const [history, setHistory] = useState<UnifiedEvent[]>([]);
-  const [followingCount, setFollowingCount] = useState(0);
+  const [following, setFollowing] = useState<FollowListPerson[]>([]);
+  const [openSheet, setOpenSheet] = useState<"followers" | "following" | null>(null);
   const [rating, setRating] = useState<{ average: number | null; count: number }>({
     average: null,
     count: 0,
@@ -30,7 +32,7 @@ export default function ProfilePage() {
     setSession(s);
     setHistory(getEventHistoryFor(s.name));
     setRating(getAverageRating(s.name));
-    setFollowingCount(getFollowingCount());
+    setFollowing(getFollowingProfiles());
   }, [router]);
 
   if (!session) return null;
@@ -71,15 +73,34 @@ export default function ProfilePage() {
       </div>
 
       <div className="mt-6 flex border-y-2 border-ink py-4">
-        <div className="flex-1 border-e-2 border-ink text-center">
+        <button
+          type="button"
+          onClick={() => setOpenSheet("followers")}
+          className="flex-1 border-e-2 border-ink text-center"
+        >
           <p className="text-h2 text-ink">۰</p>
           <p className="text-caption uppercase tracking-wide text-muted-strong">دنبال‌کننده</p>
-        </div>
-        <div className="flex-1 text-center">
-          <p className="text-h2 text-ink">{followingCount}</p>
+        </button>
+        <button type="button" onClick={() => setOpenSheet("following")} className="flex-1 text-center">
+          <p className="text-h2 text-ink">{following.length}</p>
           <p className="text-caption uppercase tracking-wide text-muted-strong">دنبال‌شونده</p>
-        </div>
+        </button>
       </div>
+
+      <FollowListSheet
+        open={openSheet === "followers"}
+        onClose={() => setOpenSheet(null)}
+        title="دنبال‌کنندگان"
+        people={[]}
+        emptyMessage="هنوز کسی شما را دنبال نکرده"
+      />
+      <FollowListSheet
+        open={openSheet === "following"}
+        onClose={() => setOpenSheet(null)}
+        title="دنبال‌شونده‌ها"
+        people={following}
+        emptyMessage="هنوز کسی را دنبال نکرده‌اید"
+      />
 
       <div className="mt-8">
         <h2 className="text-h2 text-ink">تاریخچهٔ رویدادها</h2>

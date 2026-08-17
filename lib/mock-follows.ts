@@ -1,3 +1,5 @@
+import { MOCK_PROFILES, type MockProfileSummary } from "./mock-data";
+
 const KEY = "kooh-following";
 
 function loadFollowing(): string[] {
@@ -30,4 +32,10 @@ export function toggleFollow(profileId: string): boolean {
 
 export function getFollowingCount(): number {
   return loadFollowing().length;
+}
+
+/** The real, mock-user-authored list of profiles the current user follows. */
+export function getFollowingProfiles(): MockProfileSummary[] {
+  const ids = loadFollowing();
+  return MOCK_PROFILES.filter((p) => ids.includes(p.id));
 }
