@@ -186,12 +186,12 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
           {!held && pending.length > 0 && (
             <div className="mt-4 flex flex-col gap-3">
               {pending.map((r) => (
-                <Card key={r.id} className="flex items-center justify-between p-3">
-                  <div className="flex items-center gap-3">
+                <Card key={r.id} className="flex items-center justify-between gap-2 p-3">
+                  <div className="flex min-w-0 items-center gap-3">
                     <Avatar name={r.requesterName} size={40} />
-                    <span className="text-body-sm font-bold text-ink">{r.requesterName}</span>
+                    <span className="truncate text-body-sm font-bold text-ink">{r.requesterName}</span>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex shrink-0 gap-2">
                     <Button
                       variant="accent-blue"
                       size="sm"
@@ -327,7 +327,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && submitComment()}
-              className="h-12 flex-1 rounded-pill border-2 border-transparent bg-surface px-5 text-body-sm text-ink outline-none focus:border-ink focus:bg-paper"
+              className="h-12 min-w-0 flex-1 rounded-pill border-2 border-transparent bg-surface px-5 text-body-sm text-ink outline-none focus:border-ink focus:bg-paper"
             />
             <Button
               variant="accent-blue"
