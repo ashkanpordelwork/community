@@ -132,12 +132,7 @@ export default function FeedPage() {
                     </p>
                   </div>
                 </div>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  shadow={false}
-                  onClick={() => follow(profile.id, profile.name)}
-                >
+                <Button variant="secondary" size="sm" onClick={() => follow(profile.id, profile.name)}>
                   دنبال کردن
                 </Button>
               </Card>

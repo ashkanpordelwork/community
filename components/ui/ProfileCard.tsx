@@ -49,12 +49,7 @@ export function ProfileCard({
           </span>
         ))}
       </div>
-      <Button
-        variant={following ? "secondary" : "primary"}
-        size="sm"
-        shadow={false}
-        className="mt-4"
-      >
+      <Button variant={following ? "secondary" : "primary"} size="sm" className="mt-4">
         {following ? "دنبال می‌کنید" : "دنبال کردن"}
       </Button>
     </Card>

@@ -151,7 +151,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
         </div>
         {!event.isMine && (
           <Link href={`/profile/${event.organizerId}`}>
-            <Button variant="secondary" size="sm" shadow={false}>
+            <Button variant="secondary" size="sm">
               مشاهدهٔ پروفایل
             </Button>
           </Link>
@@ -196,7 +196,6 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                       variant="accent-blue"
                       size="sm"
                       fullWidth={false}
-                      shadow={false}
                       disabled={capacityFull}
                       onClick={() => respond(r.id, "approved")}
                     >
@@ -206,7 +205,6 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                       variant="secondary"
                       size="sm"
                       fullWidth={false}
-                      shadow={false}
                       onClick={() => respond(r.id, "rejected")}
                     >
                       رد
@@ -263,7 +261,6 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                       variant="accent-blue"
                       size="sm"
                       fullWidth={false}
-                      shadow={false}
                       className="px-10"
                       disabled={draftStars === 0}
                       onClick={submitRating}

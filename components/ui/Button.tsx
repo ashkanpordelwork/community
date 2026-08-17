@@ -8,7 +8,12 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;
   fullWidth?: boolean;
-  /** Set false for buttons sitting inside a card/list row — keeps them flat, no hard shadow. */
+  /**
+   * Whether to render the hard offset shadow. Defaults to `size === "md"` —
+   * full-size buttons are page-level primary CTAs and keep the shadow;
+   * `sm` buttons are secondary/contextual actions (inside cards, list rows,
+   * next to other controls) and stay flat. Pass explicitly to override.
+   */
   shadow?: boolean;
 }
 
@@ -29,15 +34,16 @@ export function Button({
   variant = "primary",
   size = "md",
   fullWidth = true,
-  shadow = true,
+  shadow,
   disabled,
   className,
   children,
   ...props
 }: ButtonProps) {
+  const hasShadow = shadow ?? size === "md";
   const stateClasses = disabled
     ? "bg-faded border-faded text-paper shadow-none"
-    : cn(variant !== "outline" && shadow && "shadow-hard", variantClasses[variant]);
+    : cn(variant !== "outline" && hasShadow && "shadow-hard", variantClasses[variant]);
 
   return (
     <button
