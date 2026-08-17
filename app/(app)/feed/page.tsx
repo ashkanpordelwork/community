@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { EventCard } from "@/components/ui/EventCard";
-import { MOCK_EVENTS } from "@/lib/mock-data";
+import { getAllEvents, type UnifiedEvent } from "@/lib/events";
 import { cn } from "@/lib/cn";
 
 type Tab = "public" | "following";
@@ -11,12 +11,19 @@ type Tab = "public" | "following";
 export default function FeedPage() {
   const [tab, setTab] = useState<Tab>("public");
   const [query, setQuery] = useState("");
+  // Starts empty so the server-rendered markup (no localStorage access) matches
+  // the client's first paint; created events are filled in after mount.
+  const [allEvents, setAllEvents] = useState<UnifiedEvent[]>([]);
+
+  useEffect(() => {
+    setAllEvents(getAllEvents());
+  }, []);
 
   const events = useMemo(() => {
-    const base = tab === "following" ? MOCK_EVENTS.filter((e) => e.following) : MOCK_EVENTS;
+    const base = tab === "following" ? allEvents.filter((e) => e.following) : allEvents;
     const q = query.trim();
     return q ? base.filter((e) => e.title.includes(q) || e.topic.includes(q)) : base;
-  }, [tab, query]);
+  }, [tab, query, allEvents]);
 
   return (
     <div className="flex flex-col px-6 pb-8 pt-6">

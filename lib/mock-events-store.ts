@@ -7,6 +7,7 @@ export interface Checkpoint {
 }
 
 export interface DraftEvent {
+  id: string;
   title: string;
   topic: string;
   date: string;
@@ -20,11 +21,13 @@ export interface DraftEvent {
 
 const KEY = "kooh-created-events";
 
-export function saveCreatedEvent(event: DraftEvent) {
-  if (typeof window === "undefined") return;
+export function saveCreatedEvent(event: Omit<DraftEvent, "id">): DraftEvent {
+  const saved: DraftEvent = { ...event, id: crypto.randomUUID() };
+  if (typeof window === "undefined") return saved;
   const existing = loadCreatedEvents();
-  existing.push(event);
+  existing.push(saved);
   window.localStorage.setItem(KEY, JSON.stringify(existing));
+  return saved;
 }
 
 export function loadCreatedEvents(): DraftEvent[] {

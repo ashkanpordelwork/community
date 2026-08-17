@@ -12,6 +12,7 @@ import { PickerField } from "@/components/ui/PickerField";
 import { DateWheelPicker, TimeWheelPicker } from "@/components/ui/DateTimeWheel";
 import { formatJalaliDate } from "@/lib/jalali";
 import { saveCreatedEvent, type Checkpoint } from "@/lib/mock-events-store";
+import { seedDemoRequests } from "@/lib/mock-join-requests";
 
 const TOPIC_SUGGESTIONS = ["کوهنوردی", "دویدن", "دوچرخه‌سواری", "طبیعت‌گردی", "دورهمی"];
 
@@ -50,7 +51,7 @@ export default function CreateEventPage() {
   };
 
   const publish = () => {
-    saveCreatedEvent({
+    const created = saveCreatedEvent({
       title: title.trim(),
       topic: effectiveTopic,
       date,
@@ -61,7 +62,8 @@ export default function CreateEventPage() {
       capacity,
       entryCondition,
     });
-    router.push("/feed");
+    seedDemoRequests(created.id);
+    router.push(`/events/${created.id}`);
   };
 
   return (
