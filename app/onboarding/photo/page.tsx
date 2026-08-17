@@ -20,7 +20,7 @@ export default function PhotoPage() {
   return (
     <div className="flex flex-1 flex-col px-6 pb-8 pt-6">
       <h1 className="text-h1 text-ink">یک عکس پروفایل انتخاب کنید</h1>
-      <p className="mt-2 text-caption uppercase tracking-wide text-muted">
+      <p className="mt-2 text-caption uppercase tracking-wide text-muted-strong">
         این عکس روی پروفایل عمومی شما نمایش داده می‌شود
       </p>
 

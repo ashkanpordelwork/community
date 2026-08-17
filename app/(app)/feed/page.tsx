@@ -85,7 +85,7 @@ export default function FeedPage() {
         {events.length === 0 && tab === "following" && (
           <div className="mt-10 flex flex-col items-center gap-3 text-center">
             <p className="text-body text-ink">هنوز کسی را دنبال نمی‌کنید</p>
-            <p className="text-body-sm text-muted">
+            <p className="text-body-sm text-muted-strong">
               برای دیدن رویدادهای افراد موردعلاقه‌تان، اول چند نفر را دنبال کنید
             </p>
             <button
@@ -99,7 +99,7 @@ export default function FeedPage() {
         )}
 
         {events.length === 0 && tab === "public" && (
-          <p className="mt-10 text-center text-body text-muted">نتیجه‌ای پیدا نشد</p>
+          <p className="mt-10 text-center text-body text-muted-strong">نتیجه‌ای پیدا نشد</p>
         )}
       </div>
     </div>

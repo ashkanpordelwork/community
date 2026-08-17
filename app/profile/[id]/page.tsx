@@ -31,7 +31,7 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
           <h1 className="text-h1 text-ink">{profile.name}</h1>
           {profile.verified && <VerifiedBadge />}
         </div>
-        <p className="mt-1 text-body-sm text-muted">
+        <p className="mt-1 text-body-sm text-muted-strong">
           {profile.eventsCount} رویداد · امتیاز {profile.rating.toFixed(1)}
         </p>
 
@@ -68,14 +68,14 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
         </Button>
       </div>
 
-      <div className="mt-6 flex divide-x divide-x-reverse divide-border-soft border-y-2 border-border-soft py-4">
+      <div className="mt-6 flex divide-x divide-x-reverse divide-ink border-y-2 border-ink py-4">
         <div className="flex-1 text-center">
           <p className="text-h2 text-ink">{profile.followers}</p>
-          <p className="text-caption uppercase tracking-wide text-muted">دنبال‌کننده</p>
+          <p className="text-caption uppercase tracking-wide text-muted-strong">دنبال‌کننده</p>
         </div>
         <div className="flex-1 text-center">
           <p className="text-h2 text-ink">{profile.followingCount}</p>
-          <p className="text-caption uppercase tracking-wide text-muted">دنبال‌شونده</p>
+          <p className="text-caption uppercase tracking-wide text-muted-strong">دنبال‌شونده</p>
         </div>
       </div>
 
@@ -83,7 +83,7 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
         <h2 className="text-h2 text-ink">تاریخچهٔ رویدادها</h2>
         <div className="mt-4 flex flex-col gap-4">
           {organizedEvents.length === 0 && (
-            <p className="text-body-sm text-muted">هنوز رویدادی ثبت نکرده</p>
+            <p className="text-body-sm text-muted-strong">هنوز رویدادی ثبت نکرده</p>
           )}
           {organizedEvents.map((event) => (
             <Link key={event.id} href={`/events/${event.id}`}>

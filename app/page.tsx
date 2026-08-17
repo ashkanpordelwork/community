@@ -20,7 +20,7 @@ export default function Home() {
         <br />
         رویدادهای واقعی.
       </h1>
-      <p className="mt-4 text-body text-muted">
+      <p className="mt-4 text-body text-muted-strong">
         پروفایل بسازید، سابقهٔ فعالیتتان را نشان دهید و به رویدادهای گروهی نزدیک‌تان بپیوندید.
       </p>
 
@@ -40,7 +40,7 @@ export default function Home() {
           <Button>{hasSession ? "ورود به فید" : "شروع کنید"}</Button>
         </Link>
         {!hasSession && (
-          <p className="text-center text-body-sm text-muted">
+          <p className="text-center text-body-sm text-muted-strong">
             قبلاً حساب دارید؟{" "}
             <Link href="/onboarding/phone" className="font-bold text-ink underline">
               ورود

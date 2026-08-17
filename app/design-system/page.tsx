@@ -15,6 +15,7 @@ import { Avatar } from "@/components/ui/Avatar";
 
 const colors = [
   { name: "ink", cls: "bg-ink" },
+  { name: "app-bg", cls: "bg-app-bg" },
   { name: "paper", cls: "bg-paper border border-border-soft" },
   { name: "surface", cls: "bg-surface" },
   { name: "muted", cls: "bg-muted" },
@@ -46,7 +47,7 @@ export default function DesignSystemPage() {
   return (
     <main className="mx-auto w-full max-w-[480px] px-6 py-10">
       <h1 className="mb-2 text-display text-ink">سیستم طراحی</h1>
-      <p className="mb-10 text-body text-muted">
+      <p className="mb-10 text-body text-muted-strong">
         مرجع بصری کامپوننت‌ها — رنگ، تایپوگرافی، فاصله‌گذاری و state ها
       </p>
 
@@ -67,8 +68,8 @@ export default function DesignSystemPage() {
           <p className="text-h1">عنوان اصلی H1</p>
           <p className="text-h2">عنوان بخش H2</p>
           <p className="text-body">متن اصلی بدنه با وزن رگیولار برای خواندن راحت</p>
-          <p className="text-body-sm text-muted">متن ثانویهٔ کوچک‌تر</p>
-          <p className="text-caption uppercase tracking-wide text-muted">برچسب کپشن</p>
+          <p className="text-body-sm text-muted-strong">متن ثانویهٔ کوچک‌تر</p>
+          <p className="text-caption uppercase tracking-wide text-muted-strong">برچسب کپشن</p>
           <p className="text-stat">۱۵</p>
         </div>
       </Section>

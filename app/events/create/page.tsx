@@ -72,7 +72,7 @@ export default function CreateEventPage() {
       </div>
 
       <div className="mt-8 flex flex-col gap-2">
-        <span className="px-1 text-caption uppercase tracking-wide text-muted">عنوان رویداد</span>
+        <span className="px-1 text-caption uppercase tracking-wide text-muted-strong">عنوان رویداد</span>
         <Input
           placeholder="مثلاً صعود به قله دماوند"
           value={title}
@@ -82,7 +82,7 @@ export default function CreateEventPage() {
       </div>
 
       <div className="mt-6 flex flex-col gap-2">
-        <span className="px-1 text-caption uppercase tracking-wide text-muted">تاپیک</span>
+        <span className="px-1 text-caption uppercase tracking-wide text-muted-strong">تاپیک</span>
         <div className="flex flex-wrap gap-2">
           {TOPIC_SUGGESTIONS.map((t) => (
             <button
@@ -112,7 +112,7 @@ export default function CreateEventPage() {
       </div>
 
       <div className="mt-6 flex flex-col gap-2">
-        <span className="px-1 text-caption uppercase tracking-wide text-muted">تاریخ</span>
+        <span className="px-1 text-caption uppercase tracking-wide text-muted-strong">تاریخ</span>
         <PickerField
           label="تاریخ رویداد"
           value={date}
@@ -124,7 +124,7 @@ export default function CreateEventPage() {
       </div>
 
       <div className="mt-6 flex flex-col gap-2">
-        <span className="px-1 text-caption uppercase tracking-wide text-muted">ساعت</span>
+        <span className="px-1 text-caption uppercase tracking-wide text-muted-strong">ساعت</span>
         <PickerField
           label="ساعت شروع"
           value={time}
@@ -136,7 +136,7 @@ export default function CreateEventPage() {
       </div>
 
       <div className="mt-6 flex flex-col gap-2">
-        <span className="px-1 text-caption uppercase tracking-wide text-muted">توضیحات</span>
+        <span className="px-1 text-caption uppercase tracking-wide text-muted-strong">توضیحات</span>
         <Textarea
           placeholder="جزئیات مسیر، سختی، وسایل موردنیاز..."
           value={description}
@@ -239,7 +239,7 @@ export default function CreateEventPage() {
       </div>
 
       <div className="mt-6 flex flex-col gap-2">
-        <span className="px-1 text-caption uppercase tracking-wide text-muted">
+        <span className="px-1 text-caption uppercase tracking-wide text-muted-strong">
           شرط ورود (اختیاری)
         </span>
         <Input

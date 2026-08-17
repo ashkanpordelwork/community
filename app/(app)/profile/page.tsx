@@ -25,7 +25,7 @@ export default function ProfilePage() {
       <div className="flex flex-col items-center text-center">
         <Avatar name={session.name} src={session.avatarDataUrl ?? undefined} size={96} />
         <h1 className="mt-4 text-h1 text-ink">{session.name}</h1>
-        <p className="mt-1 text-body-sm text-muted">۰ رویداد · بدون امتیاز</p>
+        <p className="mt-1 text-body-sm text-muted-strong">۰ رویداد · بدون امتیاز</p>
 
         <div className="mt-3 flex flex-wrap justify-center gap-2">
           {session.tags.map((tag) => (
@@ -39,20 +39,20 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div className="mt-6 flex divide-x divide-x-reverse divide-border-soft border-y-2 border-border-soft py-4">
+      <div className="mt-6 flex divide-x divide-x-reverse divide-ink border-y-2 border-ink py-4">
         <div className="flex-1 text-center">
           <p className="text-h2 text-ink">۰</p>
-          <p className="text-caption uppercase tracking-wide text-muted">دنبال‌کننده</p>
+          <p className="text-caption uppercase tracking-wide text-muted-strong">دنبال‌کننده</p>
         </div>
         <div className="flex-1 text-center">
           <p className="text-h2 text-ink">۰</p>
-          <p className="text-caption uppercase tracking-wide text-muted">دنبال‌شونده</p>
+          <p className="text-caption uppercase tracking-wide text-muted-strong">دنبال‌شونده</p>
         </div>
       </div>
 
       <div className="mt-8 flex flex-col items-center gap-2 text-center">
         <p className="text-body text-ink">هنوز رویدادی ثبت نشده</p>
-        <p className="text-body-sm text-muted">
+        <p className="text-body-sm text-muted-strong">
           وقتی در رویدادی شرکت کنید یا رویدادی برگزار کنید، اینجا نمایش داده می‌شود
         </p>
       </div>

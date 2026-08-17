@@ -33,7 +33,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
         {event.topic}
       </span>
       <h1 className="mt-3 text-h1 text-ink">{event.title}</h1>
-      <p className="mt-2 text-body-sm text-muted">
+      <p className="mt-2 text-body-sm text-muted-strong">
         {event.date} · {event.location}
       </p>
 
@@ -42,7 +42,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
           <Avatar name={event.organizerName} size={44} />
           <div>
             <p className="text-body font-bold text-ink">{event.organizerName}</p>
-            <p className="text-caption text-muted">برگزارکننده</p>
+            <p className="text-caption text-muted-strong">برگزارکننده</p>
           </div>
         </div>
         <Link href={`/profile/${event.organizerId}`}>
