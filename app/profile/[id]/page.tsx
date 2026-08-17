@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/Button";
 import { EventCard } from "@/components/ui/EventCard";
 import { MOCK_PROFILES } from "@/lib/mock-data";
 import { getEventHistoryFor, type UnifiedEvent } from "@/lib/events";
+import { getAverageRating } from "@/lib/mock-ratings";
+import { StarRating } from "@/components/ui/StarRating";
 
 export default function PublicProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -18,9 +20,15 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
   const profile = MOCK_PROFILES.find((p) => p.id === id);
   const [following, setFollowing] = useState(profile?.following ?? false);
   const [history, setHistory] = useState<UnifiedEvent[]>([]);
+  const [rating, setRating] = useState<{ average: number | null; count: number }>({
+    average: profile?.rating ?? null,
+    count: profile?.eventsCount ?? 0,
+  });
 
   useEffect(() => {
-    if (profile) setHistory(getEventHistoryFor(profile.name));
+    if (!profile) return;
+    setHistory(getEventHistoryFor(profile.name));
+    setRating(getAverageRating(profile.name, { rating: profile.rating, count: profile.eventsCount }));
   }, [profile]);
 
   if (!profile) notFound();
@@ -35,9 +43,18 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
           <h1 className="text-h1 text-ink">{profile.name}</h1>
           {profile.verified && <VerifiedBadge />}
         </div>
-        <p className="mt-1 text-body-sm text-muted-strong">
-          {profile.eventsCount} رویداد · امتیاز {profile.rating.toFixed(1)}
-        </p>
+        <div className="mt-1 flex items-center gap-1.5 text-body-sm text-muted-strong">
+          <span>{profile.eventsCount} رویداد</span>
+          {rating.average !== null && (
+            <>
+              <span>·</span>
+              <StarRating value={rating.average} size={14} />
+              <span>
+                {rating.average.toFixed(1)} ({rating.count})
+              </span>
+            </>
+          )}
+        </div>
 
         {profile.social && (
           <a

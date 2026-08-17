@@ -7,11 +7,17 @@ import { Avatar } from "@/components/ui/Avatar";
 import { EventCard } from "@/components/ui/EventCard";
 import { loadMockSession, type MockProfile } from "@/lib/mock-session";
 import { getEventHistoryFor, type UnifiedEvent } from "@/lib/events";
+import { getAverageRating } from "@/lib/mock-ratings";
+import { StarRating } from "@/components/ui/StarRating";
 
 export default function ProfilePage() {
   const router = useRouter();
   const [session, setSession] = useState<MockProfile | null | undefined>(undefined);
   const [history, setHistory] = useState<UnifiedEvent[]>([]);
+  const [rating, setRating] = useState<{ average: number | null; count: number }>({
+    average: null,
+    count: 0,
+  });
 
   useEffect(() => {
     const s = loadMockSession();
@@ -21,6 +27,7 @@ export default function ProfilePage() {
     }
     setSession(s);
     setHistory(getEventHistoryFor(s.name));
+    setRating(getAverageRating(s.name));
   }, [router]);
 
   if (!session) return null;
@@ -30,7 +37,23 @@ export default function ProfilePage() {
       <div className="flex flex-col items-center text-center">
         <Avatar name={session.name} src={session.avatarDataUrl ?? undefined} size={96} />
         <h1 className="mt-4 text-h1 text-ink">{session.name}</h1>
-        <p className="mt-1 text-body-sm text-muted-strong">{history.length} رویداد · بدون امتیاز</p>
+        <div className="mt-1 flex items-center gap-1.5 text-body-sm text-muted-strong">
+          <span>{history.length} رویداد</span>
+          {rating.average !== null ? (
+            <>
+              <span>·</span>
+              <StarRating value={rating.average} size={14} />
+              <span>
+                {rating.average.toFixed(1)} ({rating.count})
+              </span>
+            </>
+          ) : (
+            <>
+              <span>·</span>
+              <span>بدون امتیاز</span>
+            </>
+          )}
+        </div>
 
         <div className="mt-3 flex flex-wrap justify-center gap-2">
           {session.tags.map((tag) => (

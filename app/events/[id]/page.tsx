@@ -7,14 +7,18 @@ import { BackButton } from "@/components/ui/BackButton";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Avatar } from "@/components/ui/Avatar";
+import { Textarea } from "@/components/ui/Textarea";
+import { StarRating, StarRatingInput } from "@/components/ui/StarRating";
 import { getEventById, isEventHeld, type UnifiedEvent } from "@/lib/events";
 import { loadMockSession } from "@/lib/mock-session";
+import { MOCK_PROFILES } from "@/lib/mock-data";
 import {
   createJoinRequest,
   loadJoinRequestsForEvent,
   updateJoinRequestStatus,
   type JoinRequest,
 } from "@/lib/mock-join-requests";
+import { findMyRating, getAverageRating, saveRating, type Rating } from "@/lib/mock-ratings";
 
 const accentMap = {
   blue: "bg-accent-blue-soft text-accent-blue",
@@ -29,12 +33,17 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
   const [event, setEvent] = useState<UnifiedEvent | null | undefined>(undefined);
   const [myName, setMyName] = useState<string | null>(null);
   const [requests, setRequests] = useState<JoinRequest[]>([]);
+  const [myRating, setMyRating] = useState<Rating | undefined>(undefined);
+  const [draftStars, setDraftStars] = useState(0);
+  const [draftComment, setDraftComment] = useState("");
 
   const refreshRequests = () => setRequests(loadJoinRequestsForEvent(id));
 
   useEffect(() => {
     setEvent(getEventById(id) ?? null);
-    setMyName(loadMockSession()?.name ?? null);
+    const name = loadMockSession()?.name ?? null;
+    setMyName(name);
+    if (name) setMyRating(findMyRating(id, name));
     refreshRequests();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
@@ -74,6 +83,20 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
     refreshRequests();
   };
 
+  const submitRating = () => {
+    if (!myName || draftStars === 0) return;
+    const rating = saveRating(event.id, myName, event.organizerName, draftStars, draftComment.trim());
+    setMyRating(rating);
+  };
+
+  const organizerSeedProfile = MOCK_PROFILES.find((p) => p.id === event.organizerId);
+  const organizerRating = getAverageRating(
+    event.organizerName,
+    organizerSeedProfile
+      ? { rating: organizerSeedProfile.rating, count: organizerSeedProfile.eventsCount }
+      : undefined
+  );
+
   return (
     <div className="mx-auto flex w-full max-w-[480px] flex-1 flex-col px-6 pb-8 pt-6">
       <BackButton onClick={() => router.back()} />
@@ -101,7 +124,16 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
           <Avatar name={event.organizerName} size={44} />
           <div>
             <p className="text-body font-bold text-ink">{event.organizerName}</p>
-            <p className="text-caption text-muted-strong">برگزارکننده</p>
+            {organizerRating.average !== null ? (
+              <div className="mt-0.5 flex items-center gap-1.5">
+                <StarRating value={organizerRating.average} size={14} />
+                <span className="text-caption text-muted-strong">
+                  {organizerRating.average.toFixed(1)} ({organizerRating.count})
+                </span>
+              </div>
+            ) : (
+              <p className="text-caption text-muted-strong">برگزارکننده</p>
+            )}
           </div>
         </div>
         {!event.isMine && (
@@ -188,11 +220,46 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
           )}
         </div>
       ) : held ? (
-        <div className="mt-auto pt-10 text-center">
+        <div className="mt-8">
           {myRequest?.status === "approved" ? (
-            <p className="text-body-sm font-bold text-success">شما در این رویداد شرکت کردید ✓</p>
+            <>
+              <p className="text-center text-body-sm font-bold text-success">
+                شما در این رویداد شرکت کردید ✓
+              </p>
+              <div className="mt-6">
+                <h2 className="text-h2 text-ink">امتیازدهی به برگزارکننده</h2>
+                {myRating ? (
+                  <Card className="mt-3 p-4">
+                    <StarRating value={myRating.stars} size={22} />
+                    {myRating.comment && (
+                      <p className="mt-2 text-body-sm text-muted-strong">{myRating.comment}</p>
+                    )}
+                  </Card>
+                ) : (
+                  <Card className="mt-3 flex flex-col items-center gap-3 p-4">
+                    <StarRatingInput value={draftStars} onChange={setDraftStars} />
+                    <Textarea
+                      placeholder="نظر شما دربارهٔ این رویداد (اختیاری)"
+                      value={draftComment}
+                      onChange={(e) => setDraftComment(e.target.value)}
+                      className="min-h-20"
+                    />
+                    <Button
+                      variant="accent-blue"
+                      size="sm"
+                      fullWidth={false}
+                      className="px-10"
+                      disabled={draftStars === 0}
+                      onClick={submitRating}
+                    >
+                      ثبت امتیاز
+                    </Button>
+                  </Card>
+                )}
+              </div>
+            </>
           ) : (
-            <p className="text-body-sm text-muted-strong">این رویداد برگزار شده است</p>
+            <p className="text-center text-body-sm text-muted-strong">این رویداد برگزار شده است</p>
           )}
         </div>
       ) : (
