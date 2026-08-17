@@ -10,9 +10,9 @@
   /* App canvas — behind all white cards/surfaces */
   --color-app-bg: #f5f0e6;
 
-  /* Surfaces */
-  --color-surface: #f4f4f5;
-  --color-surface-strong: #eceded;
+  /* Surfaces — warm, noticeably deeper than app-bg so inputs read as insets */
+  --color-surface: #eae3d3;
+  --color-surface-strong: #e0d6bf;
   --color-track: #e7e7ea;
 
   /* Text */

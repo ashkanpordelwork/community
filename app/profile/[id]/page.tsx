@@ -68,8 +68,8 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
         </Button>
       </div>
 
-      <div className="mt-6 flex divide-x divide-x-reverse divide-ink border-y-2 border-ink py-4">
-        <div className="flex-1 text-center">
+      <div className="mt-6 flex border-y-2 border-ink py-4">
+        <div className="flex-1 border-e-2 border-ink text-center">
           <p className="text-h2 text-ink">{profile.followers}</p>
           <p className="text-caption uppercase tracking-wide text-muted-strong">دنبال‌کننده</p>
         </div>
