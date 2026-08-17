@@ -40,6 +40,25 @@ export function getFollowingProfiles(): MockProfileSummary[] {
   return MOCK_PROFILES.filter((p) => ids.includes(p.id));
 }
 
+// Seed profiles have no real per-account follow graph (only the current mock
+// user's follows are tracked in localStorage), so who they follow is fixed
+// mock data — just enough for the "mutual follows" section to have something
+// real to intersect against.
+const SEED_FOLLOWING: Record<string, string[]> = {
+  "1": ["2"],
+  "2": ["1"],
+};
+
+/** Profiles that both the current user and `targetProfileId` follow. */
+export function getMutualFollows(targetProfileId: string): MockProfileSummary[] {
+  const myFollowingIds = new Set(loadFollowing());
+  const theirFollowingIds = SEED_FOLLOWING[targetProfileId] ?? [];
+  const mutualIds = theirFollowingIds.filter(
+    (id) => myFollowingIds.has(id) && id !== targetProfileId
+  );
+  return MOCK_PROFILES.filter((p) => mutualIds.includes(p.id));
+}
+
 export interface SuggestedProfile {
   profile: MockProfileSummary;
   sharedTags: string[];

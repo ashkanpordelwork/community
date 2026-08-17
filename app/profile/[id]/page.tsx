@@ -11,9 +11,10 @@ import { EventCard } from "@/components/ui/EventCard";
 import { MOCK_PROFILES } from "@/lib/mock-data";
 import { getAllEvents, getEventHistoryFor, type UnifiedEvent } from "@/lib/events";
 import { getAverageRating } from "@/lib/mock-ratings";
-import { isFollowing, toggleFollow } from "@/lib/mock-follows";
+import { getMutualFollows, isFollowing, toggleFollow } from "@/lib/mock-follows";
 import { notifyNewEvent } from "@/lib/mock-notifications";
 import { StarRating } from "@/components/ui/StarRating";
+import type { MockProfileSummary } from "@/lib/mock-data";
 
 export default function PublicProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -21,6 +22,7 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
   const profile = MOCK_PROFILES.find((p) => p.id === id);
   const [following, setFollowing] = useState(false);
   const [history, setHistory] = useState<UnifiedEvent[]>([]);
+  const [mutuals, setMutuals] = useState<MockProfileSummary[]>([]);
   const [rating, setRating] = useState<{ average: number | null; count: number }>({
     average: profile?.rating ?? null,
     count: profile?.eventsCount ?? 0,
@@ -31,11 +33,13 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
     setFollowing(isFollowing(profile.id));
     setHistory(getEventHistoryFor(profile.name));
     setRating(getAverageRating(profile.name, { rating: profile.rating, count: profile.eventsCount }));
+    setMutuals(getMutualFollows(profile.id));
   }, [profile]);
 
   const follow = () => {
     const nowFollowing = toggleFollow(id);
     setFollowing(nowFollowing);
+    if (profile) setMutuals(getMutualFollows(profile.id));
     if (!nowFollowing || !profile) return;
     const theirEvents = getAllEvents()
       .filter((e) => e.organizerId === id)
@@ -109,6 +113,19 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
         >
           {following ? "دنبال می‌کنید" : "دنبال کردن"}
         </Button>
+
+        {mutuals.length > 0 && (
+          <div className="mt-4 flex items-center gap-2">
+            <div className="flex -space-x-3 space-x-reverse">
+              {mutuals.map((m) => (
+                <Avatar key={m.id} name={m.name} size={24} />
+              ))}
+            </div>
+            <p className="text-caption text-muted-strong">
+              افراد مشترک: {mutuals.map((m) => m.name).join("، ")}
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="mt-6 flex border-y-2 border-ink py-4">
