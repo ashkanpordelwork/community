@@ -113,3 +113,12 @@ body {
   color: var(--color-ink);
   font-family: var(--font-sans);
 }
+
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

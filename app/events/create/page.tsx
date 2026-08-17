@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
 import { Card } from "@/components/ui/Card";
+import { DateWheelPicker, TimeWheelPicker } from "@/components/ui/DateTimeWheel";
 import { saveCreatedEvent, type Checkpoint } from "@/lib/mock-events-store";
 
 const TOPIC_SUGGESTIONS = ["کوهنوردی", "دویدن", "دوچرخه‌سواری", "طبیعت‌گردی", "دورهمی"];
@@ -103,26 +104,17 @@ export default function CreateEventPage() {
         />
       </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-3">
-        <div className="flex flex-col gap-2">
-          <span className="px-1 text-caption uppercase tracking-wide text-muted">تاریخ</span>
-          <input
-            type="date"
-            dir="ltr"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="h-14 w-full rounded-pill border-2 border-transparent bg-surface px-4 text-end text-body text-ink outline-none focus:border-ink focus:bg-paper"
-          />
+      <div className="mt-6 flex flex-col gap-2">
+        <span className="px-1 text-caption uppercase tracking-wide text-muted">تاریخ</span>
+        <div className="rounded-md border-2 border-ink bg-surface py-2">
+          <DateWheelPicker value={date} onChange={setDate} />
         </div>
-        <div className="flex flex-col gap-2">
-          <span className="px-1 text-caption uppercase tracking-wide text-muted">ساعت</span>
-          <input
-            type="time"
-            dir="ltr"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            className="h-14 w-full rounded-pill border-2 border-transparent bg-surface px-4 text-end text-body text-ink outline-none focus:border-ink focus:bg-paper"
-          />
+      </div>
+
+      <div className="mt-6 flex flex-col gap-2">
+        <span className="px-1 text-caption uppercase tracking-wide text-muted">ساعت</span>
+        <div className="rounded-md border-2 border-ink bg-surface py-2">
+          <TimeWheelPicker value={time} onChange={setTime} />
         </div>
       </div>
 
@@ -172,20 +164,22 @@ export default function CreateEventPage() {
                   onChange={(e) => updateCheckpoint(cp.id, { name: e.target.value })}
                   className="h-11 w-full rounded-pill border-2 border-transparent bg-surface px-4 text-body-sm text-ink outline-none focus:border-ink focus:bg-paper"
                 />
-                <div className="grid grid-cols-2 gap-3">
-                  <input
-                    type="time"
-                    dir="ltr"
-                    value={cp.time}
-                    onChange={(e) => updateCheckpoint(cp.id, { time: e.target.value })}
-                    className="h-11 w-full rounded-pill border-2 border-transparent bg-surface px-3 text-end text-body-sm text-ink outline-none focus:border-ink focus:bg-paper"
-                  />
-                  <input
-                    placeholder="مکان"
-                    value={cp.location}
-                    onChange={(e) => updateCheckpoint(cp.id, { location: e.target.value })}
-                    className="h-11 w-full rounded-pill border-2 border-transparent bg-surface px-4 text-body-sm text-ink outline-none focus:border-ink focus:bg-paper"
-                  />
+                <input
+                  placeholder="مکان"
+                  value={cp.location}
+                  onChange={(e) => updateCheckpoint(cp.id, { location: e.target.value })}
+                  className="h-11 w-full rounded-pill border-2 border-transparent bg-surface px-4 text-body-sm text-ink outline-none focus:border-ink focus:bg-paper"
+                />
+                <div>
+                  <span className="px-1 text-caption uppercase tracking-wide text-muted">
+                    ساعت رسیدن
+                  </span>
+                  <div className="mt-1 rounded-md border-2 border-ink bg-surface py-1">
+                    <TimeWheelPicker
+                      value={cp.time}
+                      onChange={(v) => updateCheckpoint(cp.id, { time: v })}
+                    />
+                  </div>
                 </div>
                 <input
                   placeholder="توضیح کوتاه (اختیاری)"
