@@ -12,6 +12,7 @@ import { ProfileCard } from "@/components/ui/ProfileCard";
 import { StepProgress } from "@/components/ui/StepProgress";
 import { VerifiedBadge } from "@/components/ui/Badge";
 import { Avatar } from "@/components/ui/Avatar";
+import { Logo } from "@/components/ui/Logo";
 
 const colors = [
   { name: "ink", cls: "bg-ink" },
@@ -50,6 +51,33 @@ export default function DesignSystemPage() {
       <p className="mb-10 text-body text-muted-strong">
         مرجع بصری کامپوننت‌ها — رنگ، تایپوگرافی، فاصله‌گذاری و state ها
       </p>
+
+      <Section title="لوگو">
+        <div className="flex flex-wrap items-end gap-6">
+          <div className="flex flex-col items-center gap-2">
+            <Logo size={72} className="text-ink" />
+            <span className="text-caption text-muted-strong">۷۲px</span>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <Logo size={44} className="text-ink" />
+            <span className="text-caption text-muted-strong">۴۴px</span>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <Logo size={28} className="text-ink" />
+            <span className="text-caption text-muted-strong">۲۸px</span>
+          </div>
+          <div className="flex flex-col items-center gap-2 rounded-lg bg-ink p-4">
+            <Logo size={44} className="text-paper" />
+            <span className="text-caption text-paper/70">روی زمینهٔ تیره</span>
+          </div>
+        </div>
+        <div className="mt-4 flex items-center gap-2">
+          <Logo size={32} className="text-ink" />
+          <span dir="ltr" className="text-h2 font-black tracking-tight text-ink">
+            Circle
+          </span>
+        </div>
+      </Section>
 
       <Section title="رنگ">
         <div className="grid grid-cols-3 gap-3">

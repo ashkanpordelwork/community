@@ -36,7 +36,7 @@ export default function Home() {
       </div>
 
       <div className="mt-auto flex flex-col gap-4 pt-12">
-        <Link href={hasSession ? "/feed" : "/onboarding/phone"}>
+        <Link href={hasSession ? "/feed" : "/onboarding"}>
           <Button>{hasSession ? "ورود به فید" : "شروع کنید"}</Button>
         </Link>
         {!hasSession && (
