@@ -6,11 +6,15 @@ import { useOnboarding } from "@/lib/onboarding-context";
 import { Button } from "@/components/ui/Button";
 
 const LENGTH = 4;
+// Fixed test code — real OTP delivery (Kavenegar) not wired up yet for this
+// private testing period. Any phone number + this code logs in.
+const TEST_CODE = "1234";
 
 export default function OtpPage() {
   const router = useRouter();
   const { phone } = useOnboarding();
   const [digits, setDigits] = useState<string[]>(Array(LENGTH).fill(""));
+  const [error, setError] = useState(false);
 
   const code = digits.join("");
   const isValid = code.length === LENGTH;
@@ -20,9 +24,18 @@ export default function OtpPage() {
     const next = [...digits];
     next[index] = v;
     setDigits(next);
+    setError(false);
     if (v && index < LENGTH - 1) {
       const el = document.getElementById(`otp-${index + 1}`);
       el?.focus();
+    }
+  };
+
+  const submit = () => {
+    if (code === TEST_CODE) {
+      router.push("/onboarding/name");
+    } else {
+      setError(true);
     }
   };
 
@@ -47,12 +60,16 @@ export default function OtpPage() {
         ))}
       </div>
 
+      {error && (
+        <p className="mx-auto mt-4 text-body-sm font-bold text-accent-pink">کد وارد شده اشتباه است</p>
+      )}
+
       <button type="button" className="mx-auto mt-6 text-body-sm font-bold text-accent-blue">
         ارسال مجدد کد
       </button>
 
       <div className="mt-auto pt-10">
-        <Button disabled={!isValid} onClick={() => router.push("/onboarding/name")}>
+        <Button disabled={!isValid} onClick={submit}>
           تأیید
         </Button>
       </div>
