@@ -81,7 +81,7 @@ export default function FeedPage() {
           <Link
             href="/events/create"
             aria-label="ساخت رویداد جدید"
-            className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-ink bg-ink text-paper shadow-hard-sm"
+            className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-ink bg-ink text-paper"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
               <path
