@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "کوهیار",
-  description: "پلتفرم پروفایل و رویدادهای گروهی",
+  title: "Circle",
+  description: "Circle — هر حلقه، یه ماجراجویی جدید",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

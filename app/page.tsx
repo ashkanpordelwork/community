@@ -15,13 +15,13 @@ export default function Home() {
 
   return (
     <main className="mx-auto flex w-full max-w-[480px] flex-1 flex-col px-6 pb-8 pt-16">
-      <h1 className="text-display text-ink">
-        هم‌مسیرهای واقعی،
-        <br />
-        رویدادهای واقعی.
-      </h1>
+      <span dir="ltr" className="text-h2 font-black tracking-tight text-ink">
+        Circle
+      </span>
+      <h1 className="mt-4 text-display text-ink">هر حلقه، یه ماجراجویی جدید</h1>
       <p className="mt-4 text-body text-muted-strong">
-        پروفایل بسازید، سابقهٔ فعالیتتان را نشان دهید و به رویدادهای گروهی نزدیک‌تان بپیوندید.
+        بیا با هم دور هم جمع بشیم؛ پروفایل بساز، سابقهٔ فعالیت‌هات رو نشون بده و به رویدادهای
+        گروهی نزدیکت بپیوند.
       </p>
 
       <div className="mt-10">
